@@ -1,41 +1,96 @@
 
+const todoService = require('../services/todo.service');
+const {
+  validateCreateTodo,
+  validateUpdateTodo
+} = require('../validators/todo.validator');
 
-exports.getTodos = async (req, res, next) => {
+
+const getTodos = async (req, res, next) => {
   try {
-    res.status(501).json({ success: false, message: 'getTodos not implemented (Part 2)' });
+    const todos = await todoService.getTodos();
+
+    res.status(200).json({
+      success: true,
+      data: todos
+    });
   } catch (error) {
     next(error);
   }
 };
 
-exports.getTodoById = async (req, res, next) => {
+
+const getTodo = async (req, res, next) => {
   try {
-    res.status(501).json({ success: false, message: 'getTodoById not implemented (Part 2)' });
+    const { id } = req.params;
+    const todo = await todoService.getTodoById(id);
+
+    res.status(200).json({
+      success: true,
+      data: todo
+    });
   } catch (error) {
     next(error);
   }
 };
 
-exports.createTodo = async (req, res, next) => {
+
+const createTodo = async (req, res, next) => {
   try {
-    res.status(501).json({ success: false, message: 'createTodo not implemented (Part 2)' });
+    validateCreateTodo(req.body);
+
+    const newTodo = await todoService.createTodo(req.body);
+
+    res.status(201).json({
+      success: true,
+      data: newTodo,
+      message: 'Todo created successfully'
+    });
   } catch (error) {
     next(error);
   }
 };
 
-exports.updateTodo = async (req, res, next) => {
+
+const updateTodo = async (req, res, next) => {
   try {
-    res.status(501).json({ success: false, message: 'updateTodo not implemented (Part 2)' });
+    const { id } = req.params;
+
+    validateUpdateTodo(req.body);
+
+    const updatedTodo = await todoService.updateTodo(id, req.body);
+
+    res.status(200).json({
+      success: true,
+      data: updatedTodo,
+      message: 'Todo updated successfully'
+    });
   } catch (error) {
     next(error);
   }
 };
 
-exports.deleteTodo = async (req, res, next) => {
+
+const deleteTodo = async (req, res, next) => {
   try {
-    res.status(501).json({ success: false, message: 'deleteTodo not implemented (Part 2)' });
+    const { id } = req.params;
+
+    await todoService.deleteTodo(id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Todo deleted successfully'
+    });
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  getTodos,
+  getTodo,
+  getTodoById: getTodo,
+  createTodo,
+  updateTodo,
+  deleteTodo
 };
