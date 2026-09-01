@@ -29,6 +29,9 @@ uploads/
 *.sqlite
 *.sqlite3
 
+# Explicitly ensure backend data file is tracked
+!backend/data/todos.json
+
 # IDE / OS / Editor files
 .vscode/
 .idea/

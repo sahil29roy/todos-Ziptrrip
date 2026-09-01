@@ -1,15 +1,20 @@
 {
   "name": "todo-backend",
   "version": "1.0.0",
-  "description": "Todo Application Backend - Express Server & API Routing (Part 1)",
+  "description": "Todo Application Backend",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "dev": "node --watch src/server.js"
+    "dev": "node --watch src/server.js",
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
