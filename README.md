@@ -1,34 +1,50 @@
-# Todo Application
+# Ziptrrip Technical Assignment — Full Stack Todo Application
 
 ## Overview
-A full-featured Todo application backend built with Node.js and Express.js, featuring layered architecture, input validation, JSON file persistence, centralized error handling, and automated integration tests.
+A production-ready Full Stack Todo application built with **Node.js, Express.js** on the backend and **React (Vite)** on the frontend. The application features layered backend architecture (Controller-Service-Repository), JSON file persistence, comprehensive body validation, centralized error handling, and a sleek dark-themed React dashboard with multi-page navigation, full CRUD capabilities, and query-parameter based detail view (`/todo?id=<todo-id>`).
 
 ---
 
-## Features
-- **Create Todo**: Create todos with title, description, priority, due date, and completion status.
-- **View All Todos**: Fetch all stored todos.
-- **View Single Todo**: Retrieve a todo item by ID.
-- **Update Todo**: Update existing todo properties with automatic `updatedAt` tracking.
-- **Delete Todo**: Permanently remove a todo item by ID.
-- **Input Validation**: Strict request body validation.
-- **JSON Persistence**: Persistent storage in `data/todos.json`.
-- **Centralized Error & 404 Handling**: Clean JSON responses for errors and unknown routes.
+## Key Features
+
+### Backend
+- **RESTful API Architecture**: Strict separation of concerns (Routes → Controllers → Service Layer → Repository → JSON File Storage).
+- **CRUD Endpoints**:
+  - `GET /api/todos`: Fetch all todo items.
+  - `GET /api/todos/:id`: Retrieve a specific todo item by ID.
+  - `POST /api/todos`: Create a new todo item with input validation.
+  - `PUT /api/todos/:id`: Update existing todo item fields.
+  - `DELETE /api/todos/:id`: Permanently delete a todo item.
+- **Input Validation**: Rejects missing titles, empty strings, invalid priority values, and invalid boolean completion states.
+- **Persistence**: Data saved in `backend/data/todos.json` with asynchronous file locking/reading routines (`fs/promises`).
+- **Error Middleware**: Centralized 404 Not Found and 500 Global Error Handling.
+- **Automated Tests**: Jest + Supertest test suite.
+
+### Frontend
+- **Dark Visual Dashboard**: Styled with custom CSS variables matching modern dark mode standards (`#09090b` background, `#121215` card surfaces, `#8b5cf6` primary purple accents).
+- **Multi-Page Navigation**:
+  - **Main Dashboard (`/todos`)**: Overview of todos, search bar, status tabs (`All`, `Active`, `Completed`), and pagination controls.
+  - **Todo Detail Page (`/todo?id=<todo-id>`)**: Comprehensive detail view receiving the Todo ID strictly via query parameter, displaying complete metadata (status, priority, due date, created/updated dates) with back navigation.
+- **CRUD Operations & Modals**:
+  - **Create Modal**: Add todos with Title, Description, Priority (`low`/`medium`/`high`), and Due Date.
+  - **Edit Modal**: Edit existing tasks in place across both list and detail views.
+  - **Delete Modal**: Destructive confirmation dialog before task deletion.
+  - **Completion Toggle**: Direct checkbox toggles with optimistic UI state updates and server synchronization.
+- **State Handling**: Comprehensive loading indicators, empty search/filter states, and missing/invalid Todo ID handling.
 
 ---
 
 ## Tech Stack
 
-### Backend
-- **Node.js**: Runtime environment
-- **Express.js**: Web framework
-- **JavaScript (CommonJS)**: Language
-- **JSON File (`fs/promises`)**: Persistence
-- **Jest & Supertest**: Automated integration testing
-
-### Frontend
-- **React** (scaffolded via Vite in `frontend/`)
-- **JavaScript**
+| Layer | Technology |
+|---|---|
+| **Frontend Framework** | React (Vite) |
+| **Frontend Styling** | Vanilla CSS (CSS Variables, Flexbox/Grid) |
+| **Icons** | Lucide React |
+| **Backend Runtime** | Node.js |
+| **Backend Framework** | Express.js |
+| **Persistence** | JSON file (`backend/data/todos.json`) |
+| **Testing** | Jest + Supertest |
 
 ---
 
@@ -38,7 +54,7 @@ A full-featured Todo application backend built with Node.js and Express.js, feat
 .
 ├── backend/
 │   ├── data/
-│   │   └── todos.json
+│   │   └── todos.json            # Persistent JSON database
 │   ├── src/
 │   │   ├── controllers/
 │   │   │   └── todo.controller.js
@@ -58,72 +74,89 @@ A full-featured Todo application backend built with Node.js and Express.js, feat
 │   ├── tests/
 │   │   └── todo.test.js
 │   └── package.json
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── Header.jsx
+│   │   │   ├── Sidebar.jsx
+│   │   │   ├── TodoCard.jsx
+│   │   │   ├── TodoModal.jsx
+│   │   │   └── DeleteConfirmModal.jsx
+│   │   ├── pages/
+│   │   │   ├── TodoListPage.jsx
+│   │   │   └── TodoDetailPage.jsx
+│   │   ├── services/
+│   │   │   └── todoApi.js        # Native fetch API service
+│   │   ├── App.jsx
+│   │   ├── index.css
+│   │   └── main.jsx
+│   ├── index.html
+│   ├── vite.config.js
+│   └── package.json
 ├── docs/
 │   ├── API.md
 │   └── FEATURES.md
-├── frontend/
 ├── .gitignore
 └── README.md
 ```
 
 ---
 
-## Installation
+## Setup & Running Instructions
 
-### Backend Setup
+### 1. Installation
+
+Install dependencies for both backend and frontend:
+
 ```bash
+# Install backend dependencies
 cd backend
 npm install
-```
 
-### Frontend Setup
-```bash
-cd frontend
+# Install frontend dependencies
+cd ../frontend
 npm install
 ```
 
----
+### 2. Running the Backend Server
 
-## Running the Backend
-
-### Production / Standard Mode
 ```bash
 cd backend
 npm start
 ```
+*The Express backend will start on **`http://localhost:5000`**.*
 
-### Development Mode (with Watch Mode)
-```bash
-cd backend
-npm run dev
-```
-The backend server runs on `http://localhost:5000` by default (configurable via `PORT` environment variable).
+### 3. Running the Frontend Development Server
 
----
-
-## Running the Frontend
+In a separate terminal window:
 
 ```bash
 cd frontend
 npm run dev
 ```
+*The Vite frontend dev server will launch (typically at **`http://localhost:3000`** or **`http://localhost:5173`**).*
 
 ---
 
-## API Documentation
+## API Reference Summary
 
-Detailed endpoint specifications, request bodies, and JSON response examples are documented in [docs/API.md](docs/API.md).
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/todos` | Retrieve all todo items |
+| `GET` | `/api/todos/:id` | Retrieve single todo item by ID |
+| `POST` | `/api/todos` | Create a new todo item |
+| `PUT` | `/api/todos/:id` | Update an existing todo item |
+| `DELETE` | `/api/todos/:id` | Delete a todo item by ID |
 
-For a complete breakdown of implemented features, see [docs/FEATURES.md](docs/FEATURES.md).
+Full request payload format and response structures are detailed in [`docs/API.md`](docs/API.md).
 
 ---
 
-## Testing
+## Running Automated Tests
 
-To run the automated API test suite:
+To execute the backend Jest & Supertest integration suite:
 
 ```bash
 cd backend
 npm test
 ```
-The test suite runs integration tests against all CRUD endpoints, validation checks, error cases, and unknown route handling using Jest and Supertest.
