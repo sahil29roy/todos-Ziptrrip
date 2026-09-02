@@ -1,20 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { TodoListPage } from './pages/TodoListPage';
-import { mockTodos } from './data/mockTodos';
 import './index.css';
 
 export function App() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-
-  const counts = useMemo(() => {
-    const all = mockTodos.length;
-    const completed = mockTodos.filter((t) => t.completed).length;
-    const active = all - completed;
-    return { all, active, completed };
-  }, []);
+  const [counts, setCounts] = useState({ all: 0, active: 0, completed: 0 });
 
   return (
     <div className="app-container">
@@ -33,6 +26,7 @@ export function App() {
             <TodoListPage
               activeFilter={activeFilter}
               onFilterChange={setActiveFilter}
+              onUpdateCounts={setCounts}
             />
           </div>
         </main>
